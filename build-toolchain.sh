@@ -168,11 +168,9 @@ else
  mkdir build-gdb
 fi
 
-../$GDB/configure --target=$TARGET --prefix=$PREFIX --disable-nls \
---disable-shared --enable-werror=no
-
-# make 2> gdb-log.txt
-make install
+../$GDB/configure --target=$TARGET --prefix=$PREFIX --disable-nls --disable-shared
+make 2> gdb-log.txt
+make install-strip
 
 cd ..
 touch gdb-finished
