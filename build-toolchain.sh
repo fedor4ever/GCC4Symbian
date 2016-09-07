@@ -14,9 +14,25 @@
 
 # --------------------
 # Global variables
-
 export TARGET=arm-none-symbianelf
-GCCC=gcc-6.1.0
+export TARGET=arm-none-symbianelf
+GCCC=gcc-6.2.0
+BINUTILS=binutils-2.27
+GDB=gdb-7.11.1
+
+# --------------------
+# Sources to extract
+if [ ! -d $BINUTILS ] ; then
+  tar -jxvf $BINUTILS.tar.bz2
+fi
+if [ ! -d $GCCC ] ; then
+  tar -jxvf $GCCC.tar.bz2
+fi
+if [ ! -d $GDB ] ; then
+  tar -zxvf $GDB.tar.gz
+fi
+
+# --------------------
 # Installation folder
 export PREFIX=/usr/local/$GCCC
 export PATH=$PATH:$PREFIX/bin
@@ -25,9 +41,6 @@ unset CFLAGS
 export CFLAGS+="-pipe"
 
 # ------------------
-BINUTILS=binutils-2.26
-GDB=gdb-7.11
-
 echo "Bulding binutils pass started"
 
 touch first-pass-started
