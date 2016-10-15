@@ -167,10 +167,6 @@ cd ..
 touch build-gcc-finished
 echo "Bulding gcc finished"
 
-touch gdb-started
-cd build-gdb
-
-# ______________________
 
 unset CFLAGS
 export CFLAGS+="-pipe"
@@ -181,9 +177,15 @@ else
  mkdir build-gdb
 fi
 
+
+# ______________________
+
+touch gdb-started
+cd build-gdb
+
 ../$GDB/configure --target=$TARGET --prefix=$PREFIX --disable-nls --disable-shared
 make 2> gdb-log.txt
-make install-strip
+make install
 
 cd ..
 touch gdb-finished

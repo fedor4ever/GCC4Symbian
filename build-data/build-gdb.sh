@@ -6,7 +6,7 @@ export PREFIX=/usr/local/$GCCC
 export PATH=$PATH:$PREFIX/bin
 unset CFLAGS
 export CFLAGS+="-pipe"
-export GDB=gdb-7.11
+export GDB=gdb-7.11.1
 
 
 if [ -d ./build-gdb ] ; then
@@ -22,7 +22,7 @@ cd build-gdb
 ../$GDB/configure --target=$TARGET --prefix=$PREFIX --disable-nls --disable-shared
 
 make 2> gdb-log.txt
-make install-strip
+make install
 
 cd ..
 touch gdb-finished
