@@ -23,13 +23,13 @@ GDB=gdb-7.11.1
 # --------------------
 # Sources to extract
 if [ ! -d $BINUTILS ] ; then
-  tar -jxvf $BINUTILS.tar.bz2
+  tar -xf $BINUTILS.tar.*
 fi
 if [ ! -d $GCCC ] ; then
-  tar -jxvf $GCCC.tar.bz2
+  tar -xf $GCCC.tar.*
 fi
 if [ ! -d $GDB ] ; then
-  tar -zxvf $GDB.tar.gz
+  tar -xf $GDB.tar.*
 fi
 
 # --------------------
