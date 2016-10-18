@@ -1,3 +1,4 @@
+#!/bin/bash
 #License - Attribution-NonCommercial 4.0 International
 
 # Notes:
@@ -18,19 +19,22 @@ export TARGET=arm-none-symbianelf
 export TARGET=arm-none-symbianelf
 GCCC=gcc-6.2.0
 BINUTILS=binutils-2.27
-GDB=gdb-7.11.1
+GDB=gdb-7.12
 
+#todo: use multithread download(aria2?)
+#WGET=aria
+WGET=wget
 # --------------------
-# Sources to extract
-if [ ! -d $BINUTILS ] ; then
-  tar -xf $BINUTILS.tar.*
-fi
-if [ ! -d $GCCC ] ; then
-  tar -xf $GCCC.tar.*
-fi
-if [ ! -d $GDB ] ; then
-  tar -xf $GDB.tar.*
-fi
+for arg in "$GDB" "$GCCC" "$BINUTILS"
+do
+  if [ ! -d $arg ] ; then
+    if [ ! -f $arg.tar.* ] ; then
+      $WGET ftp://gcc.gnu.org/pub/gdb/releases/$arg.tar.xz ftp://gcc.gnu.org/pub/gdb/releases/$arg.tar.bz2 ftp://gcc.gnu.org/pub/binutils/releases/$arg.tar.bz2 ftp://gcc.gnu.org/pub/gcc/releases/$arg/$arg.tar.bz2
+    fi
+    echo $arg
+    tar -xf $arg.tar.*
+  fi
+done
 
 # --------------------
 # Installation folder
@@ -64,20 +68,26 @@ cd ..
 touch first-pass-finished
 echo "Bulding binutils pass finished"
 
+# _____________
 echo "Copyng gcc dependency libs started"
-if [ ! -d $GCCC/mpc ] ; then
- cp -Ru mpc-1.0.3 $GCCC/mpc
-fi
-if [ ! -d $GCCC/isl ] ; then
- cp -Ru isl-0.16.1 $GCCC/isl
-fi
-if [ ! -d $GCCC/gmp ] ; then
- cp -Ru gmp-6.1.0 $GCCC/gmp
-fi
-if [ ! -d $GCCC/mpfr ] ; then
- cp -Ru mpfr-3.1.3 $GCCC/mpfr
-fi
-#cp -u configure -R $GCCC/libstdc++-v3
+
+$MPC = mpc-1.0.3
+$ISL = isl-0.16.1
+$GMP = gmp-6.1.0
+$MPFR = mpfr-3.1.4
+
+for arg in "$MPC" "$ISL" "$GMP" "$MPFR"
+do
+  dir=`echo "$arg" | grep -Eo '^.{3}[[:alpha:]]?'`
+  if [ ! -d $GCCC/$dir ] ; then
+    if [ ! -f $arg.tar.* ] ; then
+      $WGET ftp://gcc.gnu.org/pub/gcc/infrastructure/$arg.tar.bz2 ftp://gcc.gnu.org/pub/gcc/infrastructure/$arg.tar.gz
+    fi
+    tar -xf $arg.tar.*
+	cp -Ru $arg $GCCC/$dir
+  fi
+done
+
 echo "Copyng gcc dependency libs finished"
 
 # _____________
