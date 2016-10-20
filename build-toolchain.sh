@@ -71,10 +71,10 @@ echo "Bulding binutils pass finished"
 # _____________
 echo "Copyng gcc dependency libs started"
 
-$MPC = mpc-1.0.3
-$ISL = isl-0.16.1
-$GMP = gmp-6.1.0
-$MPFR = mpfr-3.1.4
+MPC=mpc-1.0.3
+ISL=isl-0.16.1
+GMP=gmp-6.1.0
+MPFR=mpfr-3.1.4
 
 for arg in "$MPC" "$ISL" "$GMP" "$MPFR"
 do
