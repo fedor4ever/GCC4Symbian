@@ -16,11 +16,14 @@
 # --------------------
 # Global variables
 export TARGET=arm-none-symbianelf
-export TARGET=arm-none-symbianelf
-GCCC=gcc-6.2.0
-BINUTILS=binutils-2.27
-GDB=gdb-7.12
+GCCC=gcc-5.5.0
+BINUTILS=binutils-2.29.1
+GDB=gdb-8.0.1
 
+# I want have enviroment-free statically linked GCC
+ICONV=--with-libiconv-prefix=/usr/local
+# MAKEJOBS=-j4
+MAKEJOBS=--jobs=1
 #todo: use multithread download(aria2?)
 #WGET=aria
 WGET=wget
@@ -29,10 +32,10 @@ for arg in "$GDB" "$GCCC" "$BINUTILS"
 do
   if [ ! -d $arg ] ; then
     if [ ! -f $arg.tar.* ] ; then
-      $WGET ftp://gcc.gnu.org/pub/gdb/releases/$arg.tar.xz ftp://gcc.gnu.org/pub/gdb/releases/$arg.tar.bz2 ftp://gcc.gnu.org/pub/binutils/releases/$arg.tar.bz2 ftp://gcc.gnu.org/pub/gcc/releases/$arg/$arg.tar.bz2
+      $WGET ftp://gcc.gnu.org/pub/gdb/releases/$arg.tar.xz ftp://gcc.gnu.org/pub/gdb/releases/$arg.tar.bz2 ftp://gcc.gnu.org/pub/binutils/releases/$arg.tar.bz2 ftp://gcc.gnu.org/pub/gcc/releases/$arg/$arg.tar.bz2 ftp://gcc.gnu.org/pub/gcc/releases/$arg/$arg.tar.xz
     fi
     echo $arg
-    tar -xf $arg.tar.*
+    tar -xvf $arg.tar.*
   fi
 done
 
@@ -47,13 +50,11 @@ export CFLAGS+="-pipe"
 # ------------------
 echo "Bulding binutils pass started"
 
-touch first-pass-started
+touch build-binutils-started
 if [ -d ./build-binutils ] ; then
  rm -rf ./build-binutils
- mkdir build-binutils
-else
- mkdir build-binutils
 fi
+mkdir build-binutils
 
 cd build-binutils
 ../$BINUTILS/configure --target=$TARGET --prefix=$PREFIX --disable-option-checking \
@@ -61,11 +62,11 @@ cd build-binutils
 --enable-werror=no --without-headers --disable-nls --disable-shared \
 --disable-libquadmath --enable-plugins --enable-multilib
 
-make
+make $MAKEJOBS
 make install-strip
 
 cd ..
-touch first-pass-finished
+touch build-binutils-finished
 echo "Bulding binutils pass finished"
 
 # _____________
@@ -95,12 +96,10 @@ unset CFLAGS
 export CFLAGS+="-pipe"
 if [ -d ./build-gcc ] ; then
  rm -rf ./build-gcc
- mkdir build-gcc
-else
- mkdir build-gcc
 fi
+mkdir build-gcc
 
-echo "Bulding gcc started"
+echo "Building gcc started"
 
 # patch for the EOF, SEEK_CUR, and SEEK_END integer constants
 # because autoconf can't set them
@@ -147,14 +146,12 @@ touch build-gcc-started
 cd build-gcc
 ../$GCCC/configure  --target=$TARGET --prefix=$PREFIX  --without-headers \
 	--enable-languages="c,c++,lto" --enable-poison-system-directories \
-	--enable-lto --with-newlib \
-	--with-gnu-as --with-gnu-ld --with-dwarf2 \
+	--enable-lto --with-newlib --enable-long-long $ICONV \
+	--with-dwarf2 --enable-interwork --enable-tls --enable-multilib \
 	--disable-hosted-libstdcxx --disable-libstdcxx-pch \
 	--disable-option-checking --disable-threads --disable-nls \
 	--disable-win32-registry --disable-libssp --disable-shared \
-	--enable-interwork --enable-tls --enable-multilib \
-	--enable-wchar_t --enable-extra-sgxxlite-multilibs --enable-c99 \
-	--enable-long-long
+	--enable-wchar_t --enable-extra-sgxxlite-multilibs --enable-c99
 	# --with-sysroot
 
 # Ugly hack for:
@@ -164,11 +161,11 @@ cd build-gcc
 # use -k because build libstdc++ expectable failes
 # but libsupc and other stuff should be installed!
 
-make -k 2> make-gcc.log
+make $MAKEJOBS -k 2> make-gcc.log
 touch first-make-call
-make -k 2>> make-gcc.log
-make -k 2>> make-gcc.log
-make -k 2>> make-gcc.log
+make $MAKEJOBS -k 2>> make-gcc.log
+make $MAKEJOBS -k 2>> make-gcc.log
+make $MAKEJOBS -k 2>> make-gcc.log
 # make -k 2>> make-gcc.log
 # make -k 2>> make-gcc.log
 make -k install-strip
@@ -182,22 +179,20 @@ unset CFLAGS
 export CFLAGS+="-pipe"
 if [ -d ./build-gdb ] ; then
  rm -rf ./build-gdb
- mkdir build-gdb
-else
- mkdir build-gdb
 fi
+mkdir build-gdb
 
 
 # ______________________
 
-touch gdb-started
+touch build-gdb-started
 cd build-gdb
 
 ../$GDB/configure --target=$TARGET --prefix=$PREFIX --disable-nls --disable-shared
-make 2> gdb-log.txt
+make $MAKEJOBS 2> gdb-log.txt
 make install
 
 cd ..
-touch gdb-finished
+touch build-gdb-finished
 
 rundll32 powrprof.dll,SetSuspendState 0,1,0

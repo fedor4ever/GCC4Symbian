@@ -1,7 +1,13 @@
 
 export TARGET=arm-none-symbianelf
 # Installation folder
-export GCCC=GCC-6.1.0
+export GCCC=GCC-5.5.0
+
+# I want have enviroment-free statically linked GCC
+ICONV=--with-libiconv-prefix=/usr/local
+# MAKEJOBS=-j4
+MAKEJOBS=--jobs=1
+
 export PREFIX=/usr/local/$GCCC
 export PATH=$PATH:$PREFIX/bin
 unset CFLAGS
@@ -24,10 +30,8 @@ fi
 
 if [ -d ./build-gcc ] ; then
  rm -rf ./build-gcc
- mkdir build-gcc
-else
- mkdir build-gcc
 fi
+mkdir build-gcc
 
 touch gcc-started
 
@@ -35,14 +39,12 @@ cd build-gcc
 
 ../$GCCC/configure  --target=$TARGET --prefix=$PREFIX  --without-headers \
 	--enable-languages="c,c++,lto" --enable-poison-system-directories \
-	--enable-lto --with-newlib --enable-long-long \
-	--with-gnu-as --with-gnu-ld --with-dwarf2 \
+	--enable-lto --with-newlib --enable-long-long $ICONV \
+	--with-dwarf2 --enable-interwork --enable-tls --enable-multilib \
 	--disable-hosted-libstdcxx --disable-libstdcxx-pch \
 	--disable-option-checking --disable-threads --disable-nls \
 	--disable-win32-registry --disable-libssp --disable-shared \
-	--enable-interwork --enable-tls --enable-multilib \
 	--enable-wchar_t --enable-extra-sgxxlite-multilibs --enable-c99
-
 	# --enable-libssp
 	
 # base version. Do not use!
@@ -59,15 +61,14 @@ cd build-gcc
 
 # Ugly hack for:
 # D:\MinGW\msys\1.0\bin\make.exe: *** couldn't commit memory for cygwin heap, Win32 error 0
-# I hope this sufficiently :-)
-make -k 2> make-gcc.log
-make -k 2>> make-gcc.log
-make -k 2>> make-gcc.log
-make -k 2>> make-gcc.log
-make -k 2>> make-gcc.log
+# I hope this suffice:-)
+make $MAKEJOBS -k 2> make-gcc.log
+touch first-make-call
+make $MAKEJOBS -k 2>> make-gcc.log
+make $MAKEJOBS -k 2>> make-gcc.log
+make $MAKEJOBS -k 2>> make-gcc.log
 # make -k 2>> make-gcc.log
-# make -k | tee make-gcc.log 2>&1
-# make -k | tee make-gcc.log 2>&1
+# make -k 2>> make-gcc.log
 
 # ___________________
 # Test 
