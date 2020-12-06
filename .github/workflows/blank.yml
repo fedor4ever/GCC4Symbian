@@ -30,9 +30,9 @@ jobs:
       - name: Run a one-line script
         run: |
     # make file runnable, might not be necessary
-    chmod +x "${GITHUB_WORKSPACE}/build-toolchain.sh"
+          chmod +x "${GITHUB_WORKSPACE}/build-toolchain.sh"
 
     # run script
-    "${GITHUB_WORKSPACE}/build-toolchain.sh"
+          "${GITHUB_WORKSPACE}/build-toolchain.sh"
 
  
