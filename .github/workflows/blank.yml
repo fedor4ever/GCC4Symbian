@@ -29,10 +29,10 @@ jobs:
       # Runs a single command using the runners shell
       - name: Run a one-line script
         run: |
-    # make file runnable, might not be necessary
-    chmod +x "${GITHUB_WORKSPACE}/build-toolchain.sh"
+          # make file runnable, might not be necessary
+          chmod +x "${GITHUB_WORKSPACE}/build-toolchain.sh"
 
-    # run script
-    "${GITHUB_WORKSPACE}/build-toolchain.sh"
+          # run script
+          "${GITHUB_WORKSPACE}/build-toolchain.sh"
 
  
