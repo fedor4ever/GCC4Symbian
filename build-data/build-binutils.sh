@@ -1,17 +1,23 @@
 
 TARGET=arm-none-symbianelf
 # Installation folder
-GCCC=gcc-5.5.0
+GCCC=gcc-11.2.0
+BINUTILS=binutils-2.35
 
-# MAKEJOBS=-j4
-MAKEJOBS=--jobs=1
 
 PREFIX=/usr/local/$GCCC
 PATH=$PATH:$PREFIX/bin
 unset CFLAGS
 export CFLAGS+="-pipe"
-# ------------------
-BINUTILS=binutils-2.29.1
+
+MAKEJOBS=-j1
+#Windows only
+#set SHELL=cmd.exe allow parallel build on windows
+if [ -z "${NUMBER_OF_PROCESSORS}" ]; then
+    MAKEJOBS=-j"${NUMBER_OF_PROCESSORS}"
+	echo "MAKEJOBS"
+	set SHELL=cmd.exe
+fi
 
 if [ -d ./build-binutils ] ; then
  rm -rf ./build-binutils
@@ -20,7 +26,7 @@ mkdir build-binutils
 
 cd build-binutils
 # make distclean
-../$BINUTILS/configure --target=$TARGET --prefix=$PREFIX \
+../$BINUTILS/./configure --target=$TARGET --prefix=$PREFIX \
 --enable-ld --enable-vtable-verify --enable-werror=no \
 --without-headers --disable-nls --disable-shared \
 --disable-libstdcxx --disable-libquadmath --enable-plugins \
@@ -30,5 +36,3 @@ make $MAKEJOBS
 make install-strip
 # make install-pdf
 cd ..
-
-rundll32 powrprof.dll,SetSuspendState 0,1,0
