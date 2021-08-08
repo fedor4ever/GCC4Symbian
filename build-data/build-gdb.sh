@@ -1,15 +1,22 @@
 
 export TARGET=arm-none-symbianelf
-GCCC=gcc-5.5.0
+GCCC=gcc-11.2.0
+GDB=gdb-10.2
 
-MAKEJOBS=--jobs=1
 
 # Installation folder
 export PREFIX=/usr/local/$GCCC
 export PATH=$PATH:$PREFIX/bin
 unset CFLAGS
 export CFLAGS+="-pipe"
-export GDB=gdb-8.0.1
+
+MAKEJOBS=-j4
+#Windows only
+#set SHELL=cmd.exe allow parallel build on windows
+if [ -z "${NUMBER_OF_PROCESSORS}" ]; then
+    MAKEJOBS=-j"${NUMBER_OF_PROCESSORS}"
+	set SHELL=cmd.exe
+fi
 
 if [ -d ./build-gdb ] ; then
  rm -rf ./build-gdb
