@@ -62,7 +62,8 @@ cd build-gcc
 	--disable-option-checking --disable-threads --disable-nls \
 	--disable-win32-registry --disable-libssp --disable-shared \
 	--enable-wchar_t --enable-extra-sgxxlite-multilibs --enable-c99 \
-	--with-static-standard-libraries --disable-libstdc__-v3  --disable-libstdcxx
+	--with-static-standard-libraries --disable-libstdc__-v3 \
+	--disable-libstdcxx --disable-libstdc__
 	# --enable-libssp
 	
 # base version. Do not use!
@@ -82,6 +83,9 @@ cd build-gcc
 # I hope this suffice:-)
 make $MAKEJOBS -k 2> make-gcc.log
 touch first-make-call
+make $MAKEJOBS -k 2>> make-gcc.log
+make $MAKEJOBS -k 2>> make-gcc.log
+make $MAKEJOBS -k 2>> make-gcc.log
 make $MAKEJOBS -k 2>> make-gcc.log
 make $MAKEJOBS -k 2>> make-gcc.log
 make $MAKEJOBS -k 2>> make-gcc.log
