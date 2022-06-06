@@ -54,16 +54,13 @@ touch gcc-started
 
 cd build-gcc
 
-../$GCCC/./configure  --target=$TARGET --prefix=$PREFIX  --without-headers \
-	--enable-languages="c,c++,lto" --enable-poison-system-directories \
-	--enable-lto --with-newlib --enable-long-long $ICONV \
-	--with-dwarf2 --enable-interwork --enable-tls --enable-multilib \
-	--disable-hosted-libstdcxx --disable-libstdcxx-pch \
+../$GCCC/./configure  --target=$TARGET --prefix=$PREFIX $ICONV --without-headers \
+	--enable-languages="c,c++,lto" --enable-lto --enable-interwork \
+	--enable-long-long --enable-tls --enable-multilib --enable-wchar_t \
+	--enable-c99 --with-newlib --with-dwarf2 --with-static-standard-libraries \
+	--disable-hosted-libstdcxx --disable-libstdcxx-pch --disable-shared \
 	--disable-option-checking --disable-threads --disable-nls \
-	--disable-win32-registry --disable-libssp --disable-shared \
-	--enable-wchar_t --enable-extra-sgxxlite-multilibs --enable-c99 \
-	--with-static-standard-libraries --disable-libstdc__-v3 \
-	--disable-libstdcxx --disable-libstdc__
+	--disable-win32-registry --disable-libssp --disable-libquadmath
 	# --enable-libssp
 	
 # base version. Do not use!
