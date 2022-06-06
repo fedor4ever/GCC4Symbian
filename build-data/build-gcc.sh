@@ -54,6 +54,9 @@ touch gcc-started
 
 cd build-gcc
 
+# --disable-hosted-libstdcxx - only build freestanding C++ runtime support,
+# Symbian only, lol
+# see libstdc++-v3/acinclude.m4
 ../$GCCC/./configure  --target=$TARGET --prefix=$PREFIX $ICONV --without-headers \
 	--enable-languages="c,c++,lto" --enable-lto --enable-interwork \
 	--enable-long-long --enable-tls --enable-multilib --enable-wchar_t \
