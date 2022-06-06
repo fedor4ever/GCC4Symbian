@@ -21,8 +21,8 @@ fi
 
 echo "Copyng gcc dependency libs started"
 
-GMP=gmp-6.1.0 #
 ISL=isl-0.16.1 #
+GMP=gmp-6.1.0 #
 MPC=mpc-1.2.1
 MPFR=mpfr-3.1.4
 # Strange build error in msys2
