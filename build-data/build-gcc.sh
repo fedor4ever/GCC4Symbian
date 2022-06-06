@@ -21,6 +21,8 @@ fi
 
 echo "Copyng gcc dependency libs started"
 
+cp -Ru sys-include $PREFIX/$TARGET
+
 ISL=isl-0.16.1 #
 GMP=gmp-6.1.0 #
 MPC=mpc-1.2.1
