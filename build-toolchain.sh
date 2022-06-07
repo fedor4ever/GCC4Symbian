@@ -39,8 +39,9 @@ for arg in "$GDB" "$GCCC" "$BINUTILS"
 do
   if [ ! -d $arg ] ; then
     if [ ! -f $arg.tar.* ] ; then
-      $WGET https://gcc.gnu.org/pub/gdb/releases/$arg.tar.xz https://gcc.gnu.org/pub/gdb/releases/$arg.tar.bz2 
-	  https://gcc.gnu.org/pub/binutils/releases/$arg.tar.bz2 https://gcc.gnu.org/pub/gcc/releases/$arg/$arg.tar.bz2 https://gcc.gnu.org/pub/gcc/releases/$arg/$arg.tar.xz
+      $WGET "https://gcc.gnu.org/pub/gdb/releases/$arg.tar.xz" "https://gcc.gnu.org/pub/gdb/releases/$arg.tar.bz2" \
+        "https://gcc.gnu.org/pub/binutils/releases/$arg.tar.bz2" "https://gcc.gnu.org/pub/gcc/releases/$arg/$arg.tar.bz2" \
+        "https://gcc.gnu.org/pub/gcc/releases/$arg/$arg.tar.xz"
     fi
     echo $arg
     tar -xf $arg.tar.*
