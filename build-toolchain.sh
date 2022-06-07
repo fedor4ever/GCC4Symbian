@@ -95,7 +95,7 @@ do
   dir=`echo "$arg" | grep -Eo '^.{3}[[:alpha:]]?'`
   if [ ! -d $GCCC/$dir ] ; then
     if [ ! -f $arg.tar.* ] ; then
-      $WGET https://gcc.gnu.org/pub/gcc/infrastructure/$arg.tar.bz2 https://ftp.gnu.org/gnu/mpc/$arg.tar.gz https://ftp.gnu.org/gnu/mpfr/$arg.tar.bz2
+      $WGET "https://gcc.gnu.org/pub/gcc/infrastructure/$arg.tar.bz2" "https://gcc.gnu.org/pub/gcc/infrastructure/$arg.tar.gz"
     fi
     tar -xf $arg.tar.*
 	cp -Ru $arg $GCCC/$dir
