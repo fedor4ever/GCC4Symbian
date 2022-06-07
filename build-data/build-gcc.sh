@@ -38,7 +38,7 @@ do
       $WGET "https://gcc.gnu.org/pub/gcc/infrastructure/$arg.tar.bz2" "https://gcc.gnu.org/pub/gcc/infrastructure/$arg.tar.gz"
     fi
     tar -xf $arg.tar.*
-	cp -Ru $arg $GCCC/$dir
+	cp -Rup $arg $GCCC/$dir
   fi
 done
 
