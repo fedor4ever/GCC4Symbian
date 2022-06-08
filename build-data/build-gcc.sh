@@ -6,18 +6,27 @@ export GCCC=gcc-11.2.0
 # I want have enviroment-free statically linked GCC
 ICONV=--with-libiconv-prefix=/usr/local
 
-export PREFIX=/usr/local/$GCCC
-export PATH=$PATH:$PREFIX/bin
 unset CFLAGS
 export CFLAGS+="-pipe -Wl,-Bstatic"
 
 MAKEJOBS=-j4
-#Windows only
-#set SHELL=cmd.exe allow parallel build on windows
-if [ -z "${NUMBER_OF_PROCESSORS}" ]; then
+WINDOWS_HOST=0
+
+case "$OSTYPE" in 
+  linux*)
+    export PREFIX=$HOME/$GCCC
+    ;;
+  mingw*)
+# We got enviroment-free statically linked GCC
+    ICONV=--with-libiconv-prefix=/usr/local
     MAKEJOBS=-j"${NUMBER_OF_PROCESSORS}"
-	set SHELL=cmd.exe
-fi
+#set SHELL=cmd.exe allow parallel build on windows
+    set SHELL=cmd.exe
+    export PREFIX=/usr/local/$GCCC
+    WINDOWS_HOST=1
+    ;;
+esac
+export PATH=$PATH:$PREFIX/bin
 
 echo "Copyng gcc dependency libs started"
 
@@ -84,15 +93,18 @@ cd build-gcc
 # D:\MinGW\msys\1.0\bin\make.exe: *** couldn't commit memory for cygwin heap, Win32 error 0
 # I hope this suffice:-)
 make $MAKEJOBS -k 2> make-gcc.log
-touch first-make-call
-make $MAKEJOBS -k 2>> make-gcc.log
-make $MAKEJOBS -k 2>> make-gcc.log
-make $MAKEJOBS -k 2>> make-gcc.log
-make $MAKEJOBS -k 2>> make-gcc.log
-make $MAKEJOBS -k 2>> make-gcc.log
-make $MAKEJOBS -k 2>> make-gcc.log
+if [ "$WINDOWS_HOST" -eq 1]; then
+	touch first-make-call
+	make $MAKEJOBS -k 2>> make-gcc.log
+	make $MAKEJOBS -k 2>> make-gcc.log
+	make $MAKEJOBS -k 2>> make-gcc.log
+	make $MAKEJOBS -k 2>> make-gcc.log
+	make $MAKEJOBS -k 2>> make-gcc.log
+	make $MAKEJOBS -k 2>> make-gcc.log
+	make $MAKEJOBS -k 2>> make-gcc.log
 # make -k 2>> make-gcc.log
 # make -k 2>> make-gcc.log
+fi
 
 # ___________________
 # Test 
@@ -116,6 +128,6 @@ echo "Bulding gcc finished"
 # ../gcc-5.2.0/contrib/test_summary >> tests-results.txt
 
 #Windows only
-if [ -z "${NUMBER_OF_PROCESSORS}" ]; then
+if [ "$WINDOWS_HOST" -eq 1 ]; then
     rundll32 powrprof.dll,SetSuspendState 0,1,0
 fi

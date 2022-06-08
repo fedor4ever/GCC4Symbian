@@ -16,20 +16,29 @@
 # --------------------
 # Global variables
 export TARGET=arm-none-symbianelf
-GCCC=gcc-11.2.0
+GCCC=gcc-12.1.0
 BINUTILS=binutils-2.35
 GDB=gdb-10.2
 
-# I want have enviroment-free statically linked GCC
-ICONV=--with-libiconv-prefix=/usr/local
-MAKEJOBS=-j4
 
-#Windows only
-#set SHELL=cmd.exe allow parallel build on windows
-if [ -z "${NUMBER_OF_PROCESSORS}" ]; then
+ICONV=
+MAKEJOBS=-j4
+WINDOWS_HOST=0
+
+case "$OSTYPE" in 
+  linux*)
+    export PREFIX=$HOME/$GCCC
+    ;;
+  mingw*)
+# We got enviroment-free statically linked GCC
+    ICONV=--with-libiconv-prefix=/usr/local
     MAKEJOBS=-j"${NUMBER_OF_PROCESSORS}"
-	set SHELL=cmd.exe
-fi
+#set SHELL=cmd.exe allow parallel build on windows
+    set SHELL=cmd.exe
+    export PREFIX=/usr/local/$GCCC
+    WINDOWS_HOST=1
+    ;;
+esac
 
 #todo: use multithread download(aria2?)
 #WGET=aria
@@ -50,7 +59,6 @@ done
 
 # --------------------
 # Installation folder
-export PREFIX=/usr/local/$GCCC
 export PATH=$PATH:$PREFIX/bin
 export CONFIGURE=$GCCC/libstdc++-v3/./configure
 unset CFLAGS
@@ -86,7 +94,7 @@ cp -Ru sys-include $PREFIX/$TARGET
 ISL=isl-0.16.1 #
 GMP=gmp-6.1.0 #
 MPC=mpc-1.2.1
-MPFR=mpfr-3.1.4
+MPFR=mpfr-4.1.0
 
 # Strange build error in msys2
 # MPC=mpc-1.0.3
@@ -133,14 +141,16 @@ cd build-gcc
 # but libsupc and other stuff should be installed!
 
 make $MAKEJOBS -k 2> make-gcc.log
-touch first-make-call
-make $MAKEJOBS -k 2>> make-gcc.log
-make $MAKEJOBS -k 2>> make-gcc.log
-make $MAKEJOBS -k 2>> make-gcc.log
-make $MAKEJOBS -k 2>> make-gcc.log
-make $MAKEJOBS -k 2>> make-gcc.log
-make $MAKEJOBS -k 2>> make-gcc.log
-make $MAKEJOBS -k 2>> make-gcc.log
+if [ "$WINDOWS_HOST" -eq 1]; then
+	touch first-make-call
+	make $MAKEJOBS -k 2>> make-gcc.log
+	make $MAKEJOBS -k 2>> make-gcc.log
+	make $MAKEJOBS -k 2>> make-gcc.log
+	make $MAKEJOBS -k 2>> make-gcc.log
+	make $MAKEJOBS -k 2>> make-gcc.log
+	make $MAKEJOBS -k 2>> make-gcc.log
+	make $MAKEJOBS -k 2>> make-gcc.log
+fi
 make -k install-strip
 
 cd ..
@@ -169,6 +179,6 @@ cd ..
 touch build-gdb-finished
 
 #Windows only
-if [ -z "${NUMBER_OF_PROCESSORS}" ]; then
+if [ "$WINDOWS_HOST" -eq 1 ]; then
     rundll32 powrprof.dll,SetSuspendState 0,1,0
 fi
