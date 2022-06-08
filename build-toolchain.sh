@@ -27,7 +27,7 @@ WINDOWS_HOST=0
 
 case "$OSTYPE" in 
   linux*)
-    export PREFIX=$HOME/$GCCC
+    export PREFIX=$HOME/gcc-builds/$GCCC
     ;;
   mingw*)
 # We got enviroment-free statically linked GCC
