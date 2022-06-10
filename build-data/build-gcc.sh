@@ -1,7 +1,7 @@
 
 export TARGET=arm-none-symbianelf
 # Installation folder
-export GCCC=gcc-11.2.0
+export GCCC=gcc-12.1.0
 
 # I want have enviroment-free statically linked GCC
 ICONV=--with-libiconv-prefix=/usr/local
