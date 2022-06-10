@@ -141,7 +141,7 @@ cd build-gcc
 # but libsupc and other stuff should be installed!
 
 make $MAKEJOBS -k 2> make-gcc.log
-if [ "$WINDOWS_HOST" -eq 1]; then
+if [ "$WINDOWS_HOST" -eq 1 ]; then
 	touch first-make-call
 	make $MAKEJOBS -k 2>> make-gcc.log
 	make $MAKEJOBS -k 2>> make-gcc.log
