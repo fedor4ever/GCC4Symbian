@@ -75,7 +75,7 @@ cd build-binutils
 --enable-werror=no --without-headers --disable-nls --disable-shared \
 --disable-libquadmath --enable-plugins --enable-multilib
 
-make $MAKEJOBS
+make $MAKEJOBS -l6
 make install-strip
 
 cd ..
@@ -139,7 +139,7 @@ cd build-gcc
 # use -k because build libstdc++ expectable failes
 # but libsupc and other stuff should be installed!
 
-make $MAKEJOBS -k 2> make-gcc.log
+make $MAKEJOBS -k -l6 2> make-gcc.log
 if [ "$WINDOWS_HOST" -eq 1 ]; then
 # Ugly hack for:
 # D:\MinGW\msys\1.0\bin\make.exe: *** couldn't commit memory for cygwin heap, Win32 error 0
@@ -174,7 +174,7 @@ touch build-gdb-started
 cd build-gdb
 
 ../$GDB/./configure --target=$TARGET --prefix=$PREFIX --disable-nls --disable-shared
-make $MAKEJOBS 2> gdb-log.txt
+make $MAKEJOBS -l6 2> gdb-log.txt
 make install
 
 cd ..

@@ -90,7 +90,7 @@ cd build-gcc
 	# --enable-wchar_t --enable-extra-sgxxlite-multilibs --enable-c99 \
 	# --enable-long-long --enable-liboffloadmic=target
 
-make $MAKEJOBS -k 2> make-gcc.log
+make $MAKEJOBS -k -l6 2> make-gcc.log
 # Ugly hack for:
 # D:\MinGW\msys\1.0\bin\make.exe: *** couldn't commit memory for cygwin heap, Win32 error 0
 # I hope this suffice:-)
