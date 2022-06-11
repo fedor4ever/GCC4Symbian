@@ -4,7 +4,7 @@ export TARGET=arm-none-symbianelf
 export GCCC=gcc-12.1.0
 
 # I want have enviroment-free statically linked GCC
-ICONV=--with-libiconv-prefix=/usr/local
+ICONV=""
 
 unset CFLAGS
 export CFLAGS+="-pipe -Wl,-Bstatic"
@@ -36,8 +36,6 @@ ISL=isl-0.16.1 #
 GMP=gmp-6.1.0 #
 MPC=mpc-1.2.1
 MPFR=mpfr-3.1.4
-# Strange build error in msys2
-# MPC=mpc-1.0.3
 
 for arg in "$GMP" "$ISL" "$MPC" "$MPFR"
 do
@@ -52,8 +50,6 @@ do
 done
 
 echo "Copyng gcc dependency libs finished"
-
-# cp configure -R $GCCC/libstdc++-v3
 
 if [ -d ./build-gcc ] ; then
  rm -rf ./build-gcc
@@ -115,8 +111,6 @@ fi
 
 make -k install-strip 2> install-gcc.log
 # make install-strip-target-libgcc
-make -k install-strip
-# make install-strip | tee install-gcc.log 2>&1
 
 cd ..
 

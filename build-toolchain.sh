@@ -21,7 +21,7 @@ BINUTILS=binutils-2.35
 GDB=gdb-10.2
 
 
-ICONV=
+ICONV=""
 MAKEJOBS=-j4
 WINDOWS_HOST=0
 
