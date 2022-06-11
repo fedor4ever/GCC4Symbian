@@ -133,15 +133,15 @@ cd build-gcc
 	--disable-option-checking --disable-threads --disable-nls \
 	--disable-win32-registry --disable-libssp --disable-libquadmath
 
-# Ugly hack for:
-# D:\MinGW\msys\1.0\bin\make.exe: *** couldn't commit memory for cygwin heap, Win32 error 0
-# I hope this enough :-)
 
 # use -k because build libstdc++ expectable failes
 # but libsupc and other stuff should be installed!
 
 make $MAKEJOBS -k 2> make-gcc.log
 if [ "$WINDOWS_HOST" -eq 1 ]; then
+# Ugly hack for:
+# D:\MinGW\msys\1.0\bin\make.exe: *** couldn't commit memory for cygwin heap, Win32 error 0
+# I hope this enough :-)
 	touch first-make-call
 	make $MAKEJOBS -k 2>> make-gcc.log
 	make $MAKEJOBS -k 2>> make-gcc.log
