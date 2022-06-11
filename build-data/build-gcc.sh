@@ -7,7 +7,12 @@ export GCCC=gcc-12.1.0
 ICONV=""
 
 unset CFLAGS
-export CFLAGS+="-pipe -Wl,-Bstatic"
+# FIXME: On Devuan linux tries to statically link with nonexisted libgcc_s.a
+#So -Bstatic windows only.
+export CFLAGS+="-pipe"
+if [ "$WINDOWS_HOST" -eq 1 ]; then
+    export CFLAGS+="-pipe -Bstatic"
+fi
 
 MAKEJOBS=-j4
 WINDOWS_HOST=0

@@ -111,7 +111,13 @@ echo "Copyng gcc dependency libs finished"
 
 # _____________
 unset CFLAGS
-export CFLAGS+="-pipe -Bstatic"
+# FIXME: On Devuan linux tries to statically link with nonexisted libgcc_s.a
+#So -Bstatic windows only.
+export CFLAGS+="-pipe"
+if [ "$WINDOWS_HOST" -eq 1 ]; then
+    export CFLAGS+="-pipe -Bstatic"
+fi
+
 if [ -d ./build-gcc ] ; then
  rm -rf ./build-gcc
 fi
