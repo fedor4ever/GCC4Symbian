@@ -57,10 +57,6 @@ do
   fi
 done
 
-# --------------------
-# Installation folder
-export PATH=$PATH:$PREFIX/bin
-export CONFIGURE=$GCCC/libstdc++-v3/./configure
 unset CFLAGS
 export CFLAGS+="-pipe -Bstatic"
 
