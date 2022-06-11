@@ -33,6 +33,16 @@ case "$OSTYPE" in
 esac
 export PATH=$PATH:$PREFIX/bin
 
+WGET="wget "
+
+if [ ! -d "$GCCC" ] ; then
+    if [ ! -f "$GCCC.tar.gz" ] ; then
+      $WGET "https://gcc.gnu.org/pub/gcc/releases/$GCCC/$GCCC.tar.xz"
+    fi
+  echo "Extracting: $GCCC"
+  tar -xf "$GCCC".tar.gz
+fi
+
 echo "Copyng gcc dependency libs started"
 
 cp -Ru sys-include $PREFIX/$TARGET
@@ -40,7 +50,7 @@ cp -Ru sys-include $PREFIX/$TARGET
 ISL=isl-0.16.1 #
 GMP=gmp-6.1.0 #
 MPC=mpc-1.2.1
-MPFR=mpfr-3.1.4
+MPFR=mpfr-4.1.0
 
 for arg in "$GMP" "$ISL" "$MPC" "$MPFR"
 do
