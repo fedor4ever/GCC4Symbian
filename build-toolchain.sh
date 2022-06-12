@@ -22,7 +22,7 @@ GDB=gdb-10.2
 
 
 ICONV=""
-MAKEJOBS=-j4
+MAKEJOBS=-j6
 WINDOWS_HOST=0
 
 case "$OSTYPE" in 
@@ -86,6 +86,9 @@ echo "Bulding binutils pass finished"
 echo "Copyng gcc dependency libs started"
 
 cp -Ru sys-include $PREFIX/$TARGET
+if [ "$GCCC" = "GCC-12.1.0" ]; then
+   cp -Ru build-data/GCC-12.1.0/libgcov-driver.c gcc-12.1.0/libgcc/libgcov-driver.c
+fi
 
 ISL=isl-0.16.1 #
 GMP=gmp-6.1.0 #
