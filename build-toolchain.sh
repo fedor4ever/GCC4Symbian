@@ -38,6 +38,15 @@ case "$OSTYPE" in
     export PREFIX=/usr/local/$GCCC
     WINDOWS_HOST=1
     ;;
+  msys*)
+# We got enviroment-free statically linked GCC
+    ICONV=--with-libiconv-prefix=/g/MinGW/msys/1.0/local
+    MAKEJOBS=-j"${NUMBER_OF_PROCESSORS}"
+#set SHELL=cmd.exe allow parallel build on windows
+    set SHELL=cmd.exe
+    export PREFIX=/g/MinGW/msys/1.0/local/$GCCC
+    WINDOWS_HOST=1
+    ;;
 esac
 
 #todo: use multithread download(aria2?)
@@ -156,7 +165,7 @@ if [ "$WINDOWS_HOST" -eq 1 ]; then
 	make $MAKEJOBS -k 2>> make-gcc.log
 	make $MAKEJOBS -k 2>> make-gcc.log
 fi
-make -k install-strip
+make -k install-strip 2> install-gcc.log
 
 cd ..
 touch build-gcc-finished

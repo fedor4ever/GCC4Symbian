@@ -30,6 +30,15 @@ case "$OSTYPE" in
     export PREFIX=/usr/local/$GCCC
     WINDOWS_HOST=1
     ;;
+  msys*)
+# We got enviroment-free statically linked GCC
+    ICONV=--with-libiconv-prefix=/g/MinGW/msys/1.0/local
+    MAKEJOBS=-j"${NUMBER_OF_PROCESSORS}"
+#set SHELL=cmd.exe allow parallel build on windows
+    set SHELL=cmd.exe
+    export PREFIX=/g/MinGW/msys/1.0/local/$GCCC
+    WINDOWS_HOST=1
+    ;;
 esac
 export PATH=$PATH:$PREFIX/bin
 
