@@ -11,7 +11,7 @@ unset CFLAGS
 #So -Bstatic windows only.
 export CFLAGS+="-pipe"
 if [ "$WINDOWS_HOST" -eq 1 ]; then
-    export CFLAGS+="-pipe -Bstatic"
+    export CFLAGS+=" -Bstatic"
 fi
 
 MAKEJOBS=-j6
@@ -55,8 +55,9 @@ fi
 echo "Copyng gcc dependency libs started"
 
 cp -Ru sys-include $PREFIX/$TARGET
-if [ "$GCCC" = "GCC-12.1.0" ]; then
-   cp -Ru build-data/GCC-12.1.0/libgcov-driver.c gcc-12.1.0/libgcc/libgcov-driver.c
+if [ "$GCCC" = "gcc-12.1.0" ]; then
+   echo "Updating gcc-12.1.0/libgcc/libgcov-driver.c"
+   cp build-data/GCC-12.1.0/libgcov-driver.c gcc-12.1.0/libgcc/libgcov-driver.c
 fi
 
 ISL=isl-0.16.1 #
