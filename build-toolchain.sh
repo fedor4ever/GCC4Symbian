@@ -118,7 +118,7 @@ unset CFLAGS
 #So -Bstatic windows only.
 export CFLAGS+="-pipe"
 if [ "$WINDOWS_HOST" -eq 1 ]; then
-    export CFLAGS+="-pipe -Bstatic"
+    export CFLAGS+=" -Bstatic"
 fi
 
 if [ -d ./build-gcc ] ; then
